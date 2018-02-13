@@ -45,7 +45,7 @@ x = BatchNormalization()(x)
 x = Activation('linear')(x)
 x = Dropout(0.5)(x)
 
-x = Dense(4,name='dx1')(x)
+x = Dense(2,name='dx1')(x)
 x = BatchNormalization()(x)
 x = Activation('linear')(x)
 
@@ -62,7 +62,7 @@ y = Dense(2,name='dy1')(place)
 y = BatchNormalization()(y)
 y = Activation('linear')(y)
 y = Dropout(0.5)(y)
-y = Dense(4,name='dy2')(y)
+y = Dense(2,name='dy2')(y)
 y = BatchNormalization()(y)
 y = Activation('linear')(y)
 y = Dropout(0.5)(y)
@@ -83,7 +83,7 @@ z = BatchNormalization()(z)
 z = Activation('linear')(z)
 z = Dropout(0.5)(z)
 
-z = Dense(4,name='dz2')(z)
+z = Dense(2,name='dz2')(z)
 z = BatchNormalization()(z)
 z = Activation('linear')(z)
 z = Dropout(0.5)(z)
@@ -100,7 +100,7 @@ model2.compile(optimizer='adam',
               loss='mse')
 
 hist = model2.fit(x_train[30:1843],[yx_train[30:1843],yy_train[30:1843],yz_train[30:1843]]
-            ,epochs=1000,verbose=1,
+            ,epochs=4000,verbose=1,
             validation_data=(x_train[0:30],[yx_train[0:30],yy_train[0:30],yz_train[0:30]])
             )
 score = model2.predict(x_train[0:40])
