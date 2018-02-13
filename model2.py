@@ -1,8 +1,8 @@
-from keras.layers import Input, LSTM, Dense,Dropout,Flatten,concatenate
+from keras.layers import Input, LSTM, Dense,Dropout,Flatten,concatenate,BatchNormalization,Activation
 from keras.models import Model
 import numpy as np
 x_train = np.load('ex.npy')
-x_train = np.concatenate((x_train,np.load('ex1.npy'),np.load('ex2.npy')))
+x_train = np.concatenate((x_train,np.load('ex1.npy'),np.load('ex21.npy'),np.load('ex22.npy'),np.load('ex31.npy'),np.load('ex32.npy')))
 yx_train = np.array([20,20,12,20,9,10,29,8,5,6,5,10,14,13,13,14,8,10,8,30,14,6,11,17,5,9,17,13,12,19,10,18,12,8,6,8,18,4,13,5,6,10,7,8,4,13,6,11,5,4,9,5,11,17,10,7,17,8,1,3,3,8,4,6,7,23,7,1,9,8,8,5,20,7,5,9,5,1,1,5,9,6,3,7,4,6,5,6,6,19,11,6,4,5,2,9,12,7,7,8,7,
                     4,3,8,4,1,9,12,4,6,7,3,5,6,6,2,2,2,13,28,5,8,4,9,4,5,10,17,4,3,5,11,3,8,12,16,3,11,9,7,5,7,12,12,5,9,10,1,13,9,7,5,15,1,7,5,8,7,17,13,6,16,10,15,3,11,2,3,6,6,7,6,5,3,6,2,15,10,5,10,19,20,2,10,2,8,3,5,6,6,7,3,18,3,5,6,2,5,4,5,
                     1,1,1,1,2,7,4,1,3,2,1,1,1,2,1,2,2,3,1,1,1,1,2,2,2,2,2,2,1,2,2,1,1,1,1,1,3,1,1,3,1,1,1,7,1,1,1,1,1,1,1,1,1,2,2,1,1,2,1,1,1,1,
@@ -40,35 +40,59 @@ print(yz_train.shape)
 
 place = Input(shape=(300,84))
 
-x = Dense(512,activation='relu',name='dx0')(place)
-x = Dropout(0.25)(x)
-x = Dense(256,activation='relu',name='dx1')(x)
+x = Dense(2,name='dx0')(place)
+x = BatchNormalization()(x)
+x = Activation('linear')(x)
+x = Dropout(0.5)(x)
+
+x = Dense(4,name='dx1')(x)
+x = BatchNormalization()(x)
+x = Activation('linear')(x)
+
 # x = Dense(256,activation='relu',name='dx3')(x)
 # x = Dense(256,activation='relu',name='dx4')(x)
 # x = Dropout(0.25)(x)
 x = Flatten()(x)
-x = Dense(32,activation='relu',name='dx2')(x)
+x = Dense(2,name='dx2')(x)
+x = BatchNormalization()(x)
+x = Activation('linear')(x)
 x_out = Dense(1,name='dx_out')(x)
 
-y = Dense(512,activation='relu',name='dy1')(place)
-y = Dropout(0.25)(y)
-y = Dense(256,activation='relu',name='dy2')(y)
+y = Dense(2,name='dy1')(place)
+y = BatchNormalization()(y)
+y = Activation('linear')(y)
+y = Dropout(0.5)(y)
+y = Dense(4,name='dy2')(y)
+y = BatchNormalization()(y)
+y = Activation('linear')(y)
+y = Dropout(0.5)(y)
+
 # y = Dense(256,activation='relu',name='dy3')(y)
 # y = Dense(256,activation='relu',name='dy4')(y)
 # y = Dropout(0.25)(y)
 y = Flatten()(y)
-y = Dense(32,activation='relu',name='dy5')(y)
+y = Dense(2,name='dy5')(y)
+y = BatchNormalization()(y)
+y = Activation('linear')(y)
+y = Dropout(0.5)(y)
+
 y_out = Dense(1,name='dy_out')(y)
 
-z = Dense(512,activation='relu',name='dz1')(place)
-z = Dropout(0.25)(z)
-z = Dense(128,activation='relu',name='dz2')(z)
-z = Dropout(0.25)(z)
+z = Dense(2,name='dz1')(place)
+z = BatchNormalization()(z)
+z = Activation('linear')(z)
+z = Dropout(0.5)(z)
+
+z = Dense(4,name='dz2')(z)
+z = BatchNormalization()(z)
+z = Activation('linear')(z)
+z = Dropout(0.5)(z)
 # z = Dense(64,activation='relu',name='dz5')(z)
 # z = Dense(64,activation='relu',name='dz6')(z)
 # z = Dropout(0.25)(z)
 # z = Dense(64,activation='relu',name='dz7')(z)
 z = Flatten()(z)
+z = Dropout(0.5)(z)
 z_out = Dense(1,activation='linear',name='dz_out')(z)
 
 model2 = Model(inputs=[place],outputs=[x_out,y_out,z_out])
