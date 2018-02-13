@@ -99,7 +99,7 @@ model2 = Model(inputs=[place],outputs=[x_out,y_out,z_out])
 model2.compile(optimizer='adam',
               loss='mse')
 
-model2.fit(x_train[30:1843],[yx_train[30:1843],yy_train[30:1843],yz_train[30:1843]]
+hist = model2.fit(x_train[30:1843],[yx_train[30:1843],yy_train[30:1843],yz_train[30:1843]]
             ,epochs=1000,verbose=1,
             validation_data=(x_train[0:30],[yx_train[0:30],yy_train[0:30],yz_train[0:30]])
             )
@@ -111,3 +111,8 @@ for i in range(len(score)):
     print(yy_train[0:40])
     print(yz_train[0:40])
     print('-----------------------------------------------')
+    
+a = hist.history['loss']
+b = hist.history['val_loss']
+np.save('loss.npy',a)
+np.svae('val_loss',b)
